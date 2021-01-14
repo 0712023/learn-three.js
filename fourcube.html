@@ -69,11 +69,19 @@
 
             camera.position.z = 8;
 
+            const sg = new THREE.SphereGeometry( 0.1, 32, 32 );
+            const sm = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+            const sphere = new THREE.Mesh( sg, sm );
+            scene.add( sphere );
+
             const animate = function () {
 				requestAnimationFrame( animate );
-
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.02;
+                sphere.position.x += 0.05;
+                if(sphere.position.x > 3){
+                    sphere.position.x = 0;
+                }
+				cube.rotation.x
+				cube.rotation.y
 				cube1.rotation.x += -0.01;
 				cube1.rotation.y += 0.02;
 				cube2.rotation.x += 0.01;

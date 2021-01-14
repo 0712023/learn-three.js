@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>
+		<script>
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+
+            const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+            
+            window.addEventListener('resize', function(){
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width,height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix();
+            })
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            
+            camera.position.z = 8;
+
+            const Sungeo = new THREE.SphereGeometry( 0.0464906417112299, 32, 32 );
+            const Sunmet = new THREE.MeshBasicMaterial( {color: 0xff0000 } );
+            const Sunsphere = new THREE.Mesh( Sungeo, Sunmet );
+            scene.add( Sunsphere );
+
+            let planetname = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptunus"];
+            let orbitradius = [0.46669835, 0.72823128, 1, 1.6660, 5.458104, 10.05350840,20.09647190, 30.32713169];
+            let planetradius = [0.000016308, 0.000040454, 0.000042635, 0.000022702, 0.000477888, 0.000402861, 0.000170849, 0.000165535];
+            let planetcolor = [0x327eeb, 0xfcba03, 0x01d000, 0xfb542b, 0xeaff00, 0x0044ff, 0x00eaff, 0x7700ff];
+            let period = [0.2408469, 0.615197, 1, 1.8808, 11.8618, 29.45, 84.07, 164.88];
+            let ellipses = {};
+            let planets = {};
+            
+            function addorbit(i){
+                const curve = new THREE.EllipseCurve(
+                    0,  0,            // ax, aY
+                    orbitradius[i], orbitradius[i],           // xRadius, yRadius
+                    0,  2 * Math.PI,  // aStartAngle, aEndAngle
+                    false,            // aClockwise
+                    0                 // aRotation
+                );
+                const points = curve.getPoints( 50 );
+                const geometry = new THREE.BufferGeometry().setFromPoints( points );
+                const material = new THREE.LineBasicMaterial( { color : 0xffff00 } );
+                const ellipse = new THREE.Line( geometry, material );
+                ellipses[planetname[i]] = ellipse;
+                scene.add(ellipses[planetname[i]])
+            }
+            //공전궤도를 90도 눕혀줌(초기값은 xy평면)
+            function rotateorbit(i){
+                ellipses[planetname[i]].rotation.x = Math.PI / 2;
+            }
+
+            //행성 구 추가
+            function addplanet(i){
+                const geo = new THREE.SphereGeometry( planetradius[i]*1000, 32, 32 );
+                const met = new THREE.MeshBasicMaterial( {color: planetcolor[i] } );
+                const sphere = new THREE.Mesh( geo, met );
+                let r = orbitradius[i];
+                let p = 0;
+                sphere.position.set(r, p, 0);
+                planets[planetname[i]] = sphere;
+                scene.add(planets[planetname[i]])
+            }
+
+            //실제로 궤도 추가되는 loop
+            for(let i = 0; i< planetname.length ; i++){
+                addorbit(i);
+                addplanet(i);
+            }
+
+            let planetinit = {};
+            for(let i = 0; i< planetname.length; i++){
+                planetinit[planetname[i]]=0;
+            }
+
+
+            const animate = function () {
+                requestAnimationFrame( animate );
+
+                // et+=0.01;
+                // let x = er*Math.sin(et)*Math.cos(ep);
+                // let y = er*Math.sin(et)*Math.sin(ep);
+                // let z = er*Math.cos(et);
+                // esphere.position.set(x, y, z);
+                for(let i = 0; i<planetname.length;i++){
+                    rotateorbit(i);
+
+                    let r = orbitradius[i];
+                    planetinit[planetname[i]] += 0.005/period[i];
+                    let t = planetinit[planetname[i]];
+                    let p = 0;
+                    let x = r*Math.sin(t)*Math.cos(p);
+                    let y = r*Math.sin(t)*Math.sin(p);
+                    let z = r*Math.cos(t);
+                    planets[planetname[i]].position.set(x,y,z);
+                }
+                //sphere.rotation.y += 0.01;
+				renderer.render( scene, camera );
+			};
+
+			animate(); 
+		</script>
+	</body>
+</html>
