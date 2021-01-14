@@ -1,3 +1,6 @@
 # learn-three.js
 
-Three.js 를 배워보자
+## Solar System
+<p align=center>
+<img src=https://i.imgur.com/CfNx9oq.gif>
+</p>
