@@ -6,4 +6,4 @@
 </p>
 
 ## Try it!
-<hr>https://0712023.github.io/learn-three.js/solarSystem.html</hr>
+<hr>https://0712023.github.io/study-three.js/solarSystem.html</hr>
