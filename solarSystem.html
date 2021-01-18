@@ -9,8 +9,8 @@
 		</style>
 	</head>
 	<body>
-		<script src="js/three.js"></script>
-        <script src="js/OrbitControls.js"></script>
+        <script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>		
 		<script>
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
@@ -29,7 +29,7 @@
 
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             
-            camera.position.z = 8;
+            camera.position.z = 10;
 
             const Sungeo = new THREE.SphereGeometry( 0.0464906417112299, 32, 32 );
             const Sunmet = new THREE.MeshBasicMaterial( {color: 0xff0000 } );

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>	
+
+    <!-- vue -->
+    <div id="app">
+        
+    </div>
+    <script>
+        let model = {
+            pub : "",
+            sub : ""
+        }
+        let vm = new Vue({
+            el:"#app",
+            data:model
+        })
+    </script>
+
+<script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+    
+    window.addEventListener('resize', function(){
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        renderer.setSize(width,height);
+        camera.aspect = width/height;
+        camera.updateProjectionMatrix();
+    })
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    
+    camera.position.z = 8;
+
+
+    const animate = function () {
+        requestAnimationFrame( animate );
+        renderer.render( scene, camera );
+    };
+
+    animate(); 
+</script>
+</body>
+</html>
