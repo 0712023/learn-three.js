@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+		import * as THREE from '../js/three.module.js';
+		import * as OrbitControls from '../js/OrbitControls.module.js';
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        window.addEventListener('resize', function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        })
+
+        new OrbitControls.OrbitControls(camera, renderer.domElement);
+
+        camera.position.z = 9;
+
+        const geometry = new THREE.BoxBufferGeometry();
+        const material = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: false});
+        const cube = new THREE.Mesh(geometry, material);
+        let cube1 = cube.clone();
+        let cube2 = cube.clone();
+        cube1.position.x = -3;
+        cube2.position.x = 3;
+        scene.add(cube1);
+        scene.add(cube2);
+
+        const points = [];
+        points.push(new THREE.Vector3(-3, 0, 0));
+        points.push(new THREE.Vector3(3, 0, 0));
+        const geometry_line = new THREE.BufferGeometry().setFromPoints(points);
+        const material_line = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+        const line = new THREE.Line(geometry_line, material_line);
+        scene.add(line);
+
+        const geo = new THREE.SphereGeometry(0.1, 32, 32);
+        const met = new THREE.MeshBasicMaterial({
+            color: 0xffff00
+        });
+        const sphere = new THREE.Mesh(geo, met);
+        sphere.position.x = -3;
+        scene.add(sphere);
+
+        const animate = function () {
+            requestAnimationFrame(animate);
+            if(sphere.position.x>3){
+                sphere.position.x=-3;
+            }
+            sphere.position.x += 0.05
+            renderer.render(scene, camera);
+        };
+
+        animate();
+    </script>
+</body>
+
+</html>

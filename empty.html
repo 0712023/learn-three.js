@@ -10,15 +10,6 @@
 <body>
 	<script src="js/three.js"></script>
 	<script src="js/OrbitControls.js"></script>
-    <button onclick="dataTransfer()">데이터 전송</button>
-
-    <script>
-        function dataTransfer() {
-            if(radius<2){
-                radius += 0.05;
-            }
-        }
-    </script>
 
 	<script>
 		const scene = new THREE.Scene();
@@ -49,42 +40,21 @@
 			points.push(new THREE.Vector3(x, y, z));
 			points.push(new THREE.Vector3(origin, origin, origin));
 			let geometry = new THREE.BufferGeometry().setFromPoints(points);
-			let line = new THREE.Line(geometry, material);
-			lines['line'+lineCnt]=line;
-			scene.add(lines['line'+lineCnt]);
+			return line = new THREE.Line(geometry, material);
 		}
+		let xAxis = drawLine(1000, origin, origin, 0xff0000);
+		let yAxis = drawLine(origin, 1000, origin, 0x00ff00);
+		let zAxis = drawLine(origin, origin, 1000, 0x0000ff);
+		scene.add(xAxis, yAxis, zAxis);
 		
-		function addCyl(rad) {
-            const geometry = new THREE.CylinderGeometry(rad, rad, 20, 32);
-            const material = new THREE.MeshBasicMaterial({
-                color: 0xffff00,
-                wireframe: false
-            });
-            const cylinder = new THREE.Mesh(geometry, material);
-            cylinder.rotation.x = Math.PI / 2
-            scene.add(cylinder);
-        }
-        
-        const geometry = new THREE.BoxGeometry(5,5,5);
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x00ff00
-        });
-        const cube = new THREE.Mesh(geometry, material);
-        let cube1 = cube.clone();
-        let cube2 = cube.clone();
-        cube1.position.z = -10;
-        cube2.position.z = 10;
-        scene.add(cube1);
-        scene.add(cube2);
+		const geometry = new THREE.BoxGeometry();
+		const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		const cube = new THREE.Mesh( geometry, material );
+		scene.add( cube );
 
-        let radius = 0.1;
 		const animate = function () {
 			requestAnimationFrame(animate);
-			drawLine(1000, origin, origin, 0xff0000);
-			drawLine(origin, 1000, origin, 0x00ff00);
-			drawLine(origin, origin, 1000, 0x0000ff);
 			
-            addCyl(radius);
 			renderer.render(scene, camera);
 		};
 
