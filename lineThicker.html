@@ -10,7 +10,15 @@
 <body>
     <script src="js/three.js"></script>
     <script src="js/OrbitControls.js"></script>
+    <button onclick="dataTransfer()">데이터 전송</button>
 
+    <script>
+        function dataTransfer() {
+            if(radius<2){
+                radius += 0.05;
+            }
+        }
+    </script>
     <script>
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
@@ -18,6 +26,7 @@
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
+        camera.position.y = 40;
 
         window.addEventListener('resize', function () {
             var width = window.innerWidth;
@@ -29,24 +38,34 @@
 
         var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-        const geometry = new THREE.BoxBufferGeometry();
-        const diceMaterials = [
-            new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('images/1.gif'), side: THREE.DoubleSide}), //right
-            new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('images/6.gif'), side: THREE.DoubleSide}), //left
-            new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('images/2.gif'), side: THREE.DoubleSide}), //top
-            new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('images/5.gif'), side: THREE.DoubleSide}), //bottom
-            new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('images/3.gif'), side: THREE.DoubleSide}), //front
-            new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('images/4.gif'), side: THREE.DoubleSide})  //back
-        ]
-        const material = new THREE.MeshFaceMaterial(diceMaterials);
-        const dice = new THREE.Mesh(geometry, material);
-
-        scene.add(dice);
         
-        camera.position.z = 4;
-
+        function addCyl(rad) {
+            const geometry = new THREE.CylinderGeometry(rad, rad, 20, 32);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                wireframe: false
+            });
+            const cylinder = new THREE.Mesh(geometry, material);
+            cylinder.rotation.x = Math.PI / 2
+            scene.add(cylinder);
+        }
+        
+        const geometry = new THREE.BoxGeometry(5,5,5);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x00ff00
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        let cube1 = cube.clone();
+        let cube2 = cube.clone();
+        cube1.position.z = -10;
+        cube2.position.z = 10;
+        scene.add(cube1);
+        scene.add(cube2);
+        
+        let radius = 0.1;
         const animate = function () {
             requestAnimationFrame(animate);
+            addCyl(radius);
             renderer.render(scene, camera);
         };
 

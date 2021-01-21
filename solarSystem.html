@@ -87,15 +87,9 @@
                 planetinit[planetname[i]]=0;
             }
 
-
             const animate = function () {
                 requestAnimationFrame( animate );
 
-                // et+=0.01;
-                // let x = er*Math.sin(et)*Math.cos(ep);
-                // let y = er*Math.sin(et)*Math.sin(ep);
-                // let z = er*Math.cos(et);
-                // esphere.position.set(x, y, z);
                 for(let i = 0; i<planetname.length;i++){
                     rotateorbit(i);
 
@@ -108,7 +102,6 @@
                     let z = r*Math.cos(t);
                     planets[planetname[i]].position.set(x,y,z);
                 }
-                //sphere.rotation.y += 0.01;
 				renderer.render( scene, camera );
 			};
 
